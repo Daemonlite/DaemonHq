@@ -19,7 +19,7 @@ const CompanyDetailsPage = () => {
       return <div>Loading...</div>;
     }
   return (
-    <div style={{ marginLeft:"100px",display:"flex",gap:"50px",marginTop:"100px" }}>
+    <div style={{ marginLeft:"100px",display:"flex",gap:"50px",marginTop:"160px" }}>
     <Card sx={{ width: '450px', marginTop: '1rem' }}>
       <CardMedia
         component="img"

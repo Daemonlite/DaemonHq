@@ -50,7 +50,7 @@ const CompanyListing = () => {
   if (!post) {
     return <div>Loading...</div>;
   }
- console.log(user._id)
+ 
   return (
     <div className="position">
       {post.map((res) => (

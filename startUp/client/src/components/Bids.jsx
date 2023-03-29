@@ -18,19 +18,17 @@ import moment from "moment";
 import { useParams } from "react-router-dom";
 import BookmarkAddOutlinedIcon from "@mui/icons-material/BookmarkAddOutlined";
 import Tooltip from "@mui/material/Tooltip";
-import SendIcon from '@mui/icons-material/Send';
+import SendIcon from "@mui/icons-material/Send";
 
 const Bids = () => {
   const [post, setPost] = useState({});
-  const [comp,setComp] = useState([])
+  const [comp, setComp] = useState([]);
   const [content, setContent] = useState("");
   const [comments, setComments] = useState([]);
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("userInfo"));
   const { id } = useParams();
-  const [approved,setApproved] = useState(false)
-
-  
+  const [approved, setApproved] = useState(false);
 
   useEffect(() => {
     axios
@@ -41,20 +39,21 @@ const Bids = () => {
 
   useEffect(() => {
     axios
-      .get(`http://localhost:7000/api/companies`,{
-        headers:{
-          token: `Bearer ${user.token}`
-        }
+      .get(`http://localhost:7000/api/companies`, {
+        headers: {
+          token: `Bearer ${user.token}`,
+        },
       })
       .then((res) => setComp(res.data))
       .catch((err) => console.log(err));
   }, [user.token]);
 
-const filteredComp = comp.filter((res)=> res._id === post.comp)
-console.log(comp)
-if (!user) {
-  navigate("/");
-}
+  const filteredComp = comp.filter((res) => res._id === post.comp);
+  console.log(post.comp)
+  console.log(comp);
+  if (!user) {
+    navigate("/");
+  }
   const placeBid = (event) => {
     event.preventDefault();
     axios
@@ -85,16 +84,20 @@ if (!user) {
   }
 
   const approve = (id) => {
-    axios.put(`http://localhost:7000/api/listing/bids/${id}`)
-    .then((res)=>{
-      console.log(res)
-      setApproved(true)
-    })
-    .catch((err)=>console.log(err))
-  } 
+    axios
+      .put(`http://localhost:7000/api/listing/bids/${id}`)
+      .then((res) => {
+        console.log(res);
+        setApproved(true);
+      })
+      .catch((err) => console.log(err));
+  };
   return (
-    <div style={{  }}>
-      <Card sx={{ maxWidth: 500,marginLeft:"120px",marginTop:"100px" }} className="cards">
+    <div style={{}}>
+      <Card
+        sx={{ maxWidth: 500, marginLeft: "120px", marginTop: "100px" }}
+        className="cards"
+      >
         <CardHeader title={post.headLine} subheader={post.companyName} />
         <Typography
           style={{
@@ -180,7 +183,7 @@ if (!user) {
             onChange={(e) => setContent(e.target.value)}
           />
           <button type="submit" className="btn btn-primary">
-            <SendIcon/>
+            <SendIcon />
           </button>
         </form>
       </Card>
@@ -196,21 +199,39 @@ if (!user) {
               color: "#555",
             }}
           >
-       <div style={{border:"1px solid #555",}}>
-       <div style={{ display: "flex", gap: "20px",marginLeft:"10px",marginTop:"10px" }}>
-              <Avatar src={bid.userProfile} />
-              <p> {bid.userName}</p>
+            <div style={{ border: "1px solid #555" }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "20px",
+                  marginLeft: "10px",
+                  marginTop: "10px",
+                }}
+              >
+                <Avatar src={bid.userProfile} />
+                <p> {bid.userName}</p>
+              </div>
+              <p
+                style={{
+                  marginLeft: "10px",
+                  marginTop: "10px",
+                  width: "330px",
+                }}
+              >
+                {bid.stake}
+              </p>
+              {/* use axios.put to update the aproved state and also if the post.user is = the user then show the approve button else indicate if approved or not */}
+
+              {user._id === filteredComp[0]?.user && !approved && (
+                <button className="btn btn-secondary" style={{ marginLeft: "10px",marginBottom:"10px" }} >Approve</button>
+              )}
+              {bid.isApproved === true && (
+                <p className="btn btn-secondary" style={{ marginLeft: "10px" }}>
+                  {bid.isApproved ? "Approved" : "pending"}
+                </p>
+              )}
             </div>
-            <p style={{marginLeft:"10px",marginTop:"10px",width:"330px"}}>{bid.stake}</p>
-            {/* use axios.put to update the aproved state and also if the post.user is = the user then show the approve button else indicate if approved or not */}
-           
-           {user._id === filteredComp.user &&  <p className="reply btn btn-secondary btn-sm" style={{marginLeft:"10px"}} onClick={()=>approve(bid._id)}>Approve Bid</p>}
-           {bid.isapproved ? (<p className="reply btn btn-secondary btn-sm" style={{marginLeft:"10px"}}>Approved</p>) : ( <p className="reply btn btn-secondary btn-sm" style={{marginLeft:"10px"}}>Pending</p>)}
-          
-           
-       </div>
           </div>
-          
         ))}
       </div>
     </div>

@@ -20,6 +20,20 @@ const getUsers = async (req, res) => {
   }
 };
 
+const getUsersById = async (req,res) => {
+  const { id } = req.params;
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+    return res.status(200).json(user);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Failed to retrieve User" });
+  }
+}
+
 const register = async (req, res) => {
     const {
       fullName,
@@ -147,5 +161,6 @@ module.exports = {
     register,
     loginUser,
     deleteUser,
-    updateUserInfo
+    updateUserInfo,
+    getUsersById
 }
