@@ -1,0 +1,19 @@
+Technology: Companies that develop and sell electronic devices, software, and online services, such as Apple, Microsoft, and Google.
+
+Healthcare: Companies that provide medical equipment, pharmaceuticals, and healthcare services, such as Pfizer, Johnson & Johnson, and UnitedHealth Group.
+
+Finance: Companies that offer financial services, including banking, insurance, and investment services, such as JPMorgan Chase, Berkshire Hathaway, and Goldman Sachs.
+
+Retail: Companies that sell consumer goods and services directly to customers, such as Walmart, Amazon, and Costco.
+
+Energy: Companies that produce, refine, and distribute energy resources, such as oil, gas, and electricity, such as ExxonMobil, Chevron, and BP.
+
+Transportation: Companies that transport people or goods, such as airlines, railroads, and shipping companies, such as Delta Air Lines, Union Pacific, and FedEx.
+
+Manufacturing: Companies that produce goods, such as automobiles, appliances, and consumer electronics, such as Ford, General Electric, and Samsung.
+
+Real Estate: Companies that own, operate, or develop real estate properties, such as REITs, property management companies, and real estate developers, such as CBRE, Simon Property Group, and Brookfield Asset Management.
+
+Consumer Goods: Companies that manufacture or distribute consumer products, such as food, beverages, personal care, and household products, such as Procter & Gamble, Coca-Cola, and Nestle.
+
+Entertainment: Companies that create, produce, and distribute entertainment content, such as movies, TV shows, music, and video games, such as Disney, Warner Bros., and Electronic Arts.
