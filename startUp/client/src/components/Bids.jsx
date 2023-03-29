@@ -49,8 +49,7 @@ const Bids = () => {
   }, [user.token]);
 
   const filteredComp = comp.filter((res) => res._id === post.comp);
-  console.log(post.comp)
-  console.log(comp);
+
   if (!user) {
     navigate("/");
   }
@@ -83,15 +82,7 @@ const Bids = () => {
     return <div>Loading...</div>;
   }
 
-  const approve = (id) => {
-    axios
-      .put(`http://localhost:7000/api/listing/bids/${id}`)
-      .then((res) => {
-        console.log(res);
-        setApproved(true);
-      })
-      .catch((err) => console.log(err));
-  };
+
   return (
     <div style={{}}>
       <Card
@@ -223,13 +214,26 @@ const Bids = () => {
               {/* use axios.put to update the aproved state and also if the post.user is = the user then show the approve button else indicate if approved or not */}
 
               {user._id === filteredComp[0]?.user && !approved && (
-                <button className="btn btn-secondary" style={{ marginLeft: "10px",marginBottom:"10px" }} >Approve</button>
+                <button className="btn btn-secondary" style={{ marginLeft: "10px",marginBottom:"10px" }} onClick={()=>{
+                  axios
+                  .put(`http://localhost:7000/api/listing/bids/${bid._id}`,{
+                    approved
+                  })
+                  .then((res) => {
+                    console.log(res);
+                    setApproved(true);
+                  })
+                  .catch((err) => console.log(err));
+
+                }} >Approve</button>
+                
               )}
-              {bid.isApproved === true && (
+              {user._id === filteredComp[0]?.user && bid.isAccepted && <p className="btn btn-secondary" style={{ marginLeft: "10px" }}>Approved</p>}
+              
                 <p className="btn btn-secondary" style={{ marginLeft: "10px" }}>
-                  {bid.isApproved ? "Approved" : "pending"}
+                  {bid.isAccepted ? "Approved" : "pending"}
                 </p>
-              )}
+              
             </div>
           </div>
         ))}
