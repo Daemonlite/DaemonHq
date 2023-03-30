@@ -9,6 +9,10 @@ const userSchema = new mongoose.Schema({
         type:String,
         require:false
     },
+    bio:{
+        type:String,
+        require:false
+    },
     password:{
         type:String,
         require:false

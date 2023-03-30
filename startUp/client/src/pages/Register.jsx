@@ -21,7 +21,9 @@ const Register = () => {
   const [fullName, setFullName] = useState("");
   const [profile, setProfile] = useState("");
   const [location, setLocation] = useState("");
+  const [bio,setBio] = useState("")
 
+  //fetches the users location automatically
   useEffect(() => {
     fetch('https://ipapi.co/json/')
       .then(response => response.json())
@@ -56,6 +58,7 @@ const Register = () => {
         password,
         profile,
         location,
+        bio
       })
       .then((res) => {
         toast.success("Register successful");
@@ -108,6 +111,14 @@ const Register = () => {
               variant="outlined"
               type="email"
               onChange={(e) => setEmail(e.target.value)}
+            />
+              <TextField
+              id="outlined-basic"
+              label="Add Bio"
+              variant="outlined"
+              type="text"
+              onChange={(e) => setBio(e.target.value)}
+              className='bio'
             />
          <label htmlFor="profile">Choose profile photo</label>
             <TextField id="outlined-basic" type="file" variant="outlined" onChange={handleFileChange} />

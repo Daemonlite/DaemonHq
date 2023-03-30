@@ -45,6 +45,7 @@ const register = async (req, res) => {
       isInvestor,
       location,
       applications,
+      bio
     } = req.body;
   
     // Validate input
@@ -98,6 +99,7 @@ const register = async (req, res) => {
       isVerified,
       isInvestor,
       location,
+      bio,
       applications: [],
     });
   
