@@ -74,28 +74,31 @@ const updateBid = async (req, res) => {
     return res.status(500).json({ message: "Failed to update bid" });
   }
 };
+const withdrawBid = async (req,res) => {
 
-const withdrawBid = async (req, res) => {
-  const bidId = req.params.id;
-
-  try {
-    const bid = await Bid.findById(bidId);
-    if (!bid) {
-      return res.status(404).json({ message: "Bid not found" });
+ let bid;
+    try {
+      bid = await Bid.findOne({ _id: id });
+      if (!bid) {
+        return res
+          .status(404)
+          .json({ message: "The specified bid was not found." });
+      }
+      await bid.deleteOne({ _id: id });
+      await Listing.updateOne(
+        { _id: bid.listing },
+        { $pull: { bids: { _id: bid._id } } }
+      );
+    } catch (err) {
+      return res.status(500).json({
+        message:
+          "Unable to withdraw the  bid. An internal server error has occurred.",
+      });
     }
-    const deletedBid = await bid.deleteOne();
-    await Listing.findByIdAndUpdate(bid.listing, {
-      $pull: { bids: bidId },
-    });
-    return res.status(200).json({ message: "Bid withdrawn successfully" });
-  } catch (error) {
-    console.error(error);
     return res
-      .status(500)
-      .json({ message: "Failed to withdraw the bid" });
-  }
-};
-
+      .status(200)
+      .json({ message: "Bid withdrawn  successfully" });
+}
 
 module.exports = {
     getBids,
