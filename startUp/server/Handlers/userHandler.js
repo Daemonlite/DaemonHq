@@ -13,150 +13,176 @@ cloudinary.config({
 const getUsers = async (req, res) => {
   try {
     const users = await User.find();
-    return res.status(200).json(users);
+    res.json(users);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Failed to retrieve users" });
+    res.status(500).json({ message: "Failed to retrieve users" });
   }
 };
 
-const getUsersById = async (req,res) => {
-  const { id } = req.params;
+const getUserById = async (req, res) => {
   try {
-    const user = await User.findById(id);
+    const user = await User.findById(req.params.id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    return res.status(200).json(user);
+    res.json(user);
   } catch (error) {
     console.error(error);
-    return res.status(500).json({ message: "Failed to retrieve User" });
+    res.status(500).json({ message: "Failed to retrieve user" });
   }
-}
+};
+
 
 const register = async (req, res) => {
-    const {
-      fullName,
-      email,
-      password,
-      isAdmin,
-      profile,
-      isVerified,
-      isInvestor,
-      location,
-      applications,
-      bio
-    } = req.body;
-  
-    // Validate input
-    if ( !email || !password ) {
-      return res.status(400).json({ message: "Please provide all required fields" });
-    }
-  
-    // Validate password
-    if (
-      !password.match(
-        /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{8,}$/
-      )
-    ) {
-      return res.status(400).json({
-        message:
-          "Password should contain at least 1 symbol, 1 number, and be at least 8 characters long",
-      });
-    }
-  
-    // Check if user already exists
-    const userExists = await User.findOne({ email });
-    if (userExists) {
-      return res
-        .status(400)
-        .json({ message: "A user with this email already exists" });
-    }
-  
-    // Upload profile image
-    let profileImageUrl;
-    try {
-      const image = req.file;
-      const result = await cloudinary.uploader.upload(profile);
-      profileImageUrl = result.secure_url;
-    } catch (error) {
-      console.error(error);
-      return res
-        .status(400)
-        .json({ message: "Failed to upload profile image" });
-    }
-  
-    // Hash password
-    const hashedPassword = await bcrypt.hash(password, 10);
-  
-    // Create user
-    const user = await User.create({
-      fullName,
-      email,
-      password: hashedPassword,
-      profile: profileImageUrl,
-      isAdmin,
-      isVerified,
-      isInvestor,
-      location,
-      bio,
-      applications: [],
-    });
-  
-    return res.status(201).json(user);
-  };
-  
+  const {
+    fullName,
+    email,
+    password,
+    isAdmin = false,
+    profile,
+    isVerified = false,
+    isInvestor = false,
+    location,
+    applications = [],
+    bio,
+  } = req.body;
 
-  const loginUser = async (req, res) => {
-    const { email, password } = req.body;
+  // Validate input
+  if (!email || !password) {
+    return res.status(400).json({ message: "Please provide all required fields" });
+  }
+
+  // Validate password
+  const passwordRegex = /^(?=.*\d)(?=.*[!@#$%^&*])(?=.*[a-zA-Z]).{8,}$/;
+  if (!passwordRegex.test(password)) {
+    return res.status(400).json({
+      message:
+        "Password should contain at least 1 symbol, 1 number, and be at least 8 characters long",
+    });
+  }
+
+  // Check if user already exists
+  const userExists = await User.findOne({ email });
+  if (userExists) {
+    return res
+      .status(400)
+      .json({ message: "A user with this email already exists" });
+  }
+
+  // Upload profile image
+  let profileImageUrl;
+  try {
+    const result = await cloudinary.uploader.upload(profile);
+    profileImageUrl = result.secure_url;
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(400)
+      .json({ message: "Failed to upload profile image" });
+  }
+
+  // Hash password
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  // Create user
+  const user = new User({
+    fullName,
+    email,
+    password: hashedPassword,
+    profile: profileImageUrl,
+    isAdmin,
+    isVerified,
+    isInvestor,
+    location,
+    bio,
+    applications,
+  });
+
+  try {
+    await user.save();
+    return res.status(201).json(user);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Failed to create user" });
+  }
+};
+
+
+const loginUser = async (req, res) => {
+  const { email, password } = req.body;
+  
+  try {
     const user = await User.findOne({ email });
-    !user && res.status(400).json("user cant be found");
-    if (user && (await bcrypt.compare(password, user.password))) {
-      const { fullName, id, isAdmin} = user;
-      const token = jwt.sign({ fullName, id, isAdmin }, process.env.SECRET, {
-        expiresIn: "2d",
-      });
-  
-      res.status(200).json({
-        ...user._doc,
-        token,
-      });
-    } else {
-      res.status(400).json("invalid user credentials");
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
     }
-  };
-  
-  const generateToken = (id) => {
-    return jwt.sign({ id }, process.env.SECRET, {
+    
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid user credentials" });
+    }
+    
+    const token = jwt.sign({ fullName: user.fullName, id: user._id, isAdmin: user.isAdmin }, process.env.SECRET, {
       expiresIn: "2d",
     });
-  };
+    
+    res.status(200).json({
+      user: {
+        id: user._id,
+        fullName: user.fullName,
+        email: user.email,
+        isAdmin: user.isAdmin,
+      },
+      token,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to login" });
+  }
+};
+
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.SECRET, {
+    expiresIn: "2d",
+  });
+};
+
+const updateUserInfo = async (req, res) => {
+  const { id } = req.params;
+  const updatedInfo = req.body;
   
-  const updateUserInfo = async (req, res) => {
-    const userId = req.params.id;
-    const updatedInfo = req.body;
-  
-    const upUserInfo = await User.findByIdAndUpdate(userId, updatedInfo, {
+  try {
+    const updatedUser = await User.findByIdAndUpdate(id, updatedInfo, {
       new: true,
     });
-  
-    if (!upUserInfo) {
+    
+    if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
-  
-    res.status(200).json(upUserInfo);
-  };
-  const deleteUser = async (req, res) => {
-    const userId = req.params.id;
-  
-    const user = await User.findByIdAndDelete(userId);
-  
-    if (!user) {
-      return res.status(404).json({ message: "user   not found" });
+    
+    res.status(200).json(updatedUser);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Failed to update user info" });
+  }
+};
+
+
+const deleteUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedUser = await User.findByIdAndDelete(id);
+    if (!deletedUser) {
+      return res.status(404).json({ message: "User not found" });
     }
-  
-    res.status(200).json({ message: "user  deleted successfully" });
-  };
+    return res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Failed to delete user" });
+  }
+};
+;
 
 module.exports = {
     getUsers,
@@ -164,5 +190,6 @@ module.exports = {
     loginUser,
     deleteUser,
     updateUserInfo,
-    getUsersById
+    getUserById,
+    generateToken,
 }
