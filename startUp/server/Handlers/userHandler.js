@@ -128,12 +128,7 @@ const loginUser = async (req, res) => {
     });
     
     res.status(200).json({
-      user: {
-        id: user._id,
-        fullName: user.fullName,
-        email: user.email,
-        isAdmin: user.isAdmin,
-      },
+      ...user._doc,
       token,
     });
   } catch (error) {
