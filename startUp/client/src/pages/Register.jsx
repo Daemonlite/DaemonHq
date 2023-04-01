@@ -22,6 +22,7 @@ const Register = () => {
   const [profile, setProfile] = useState("");
   const [location, setLocation] = useState("");
   const [bio,setBio] = useState("")
+  const [isInvestor,setIsInvestor] = useState(false)
 
   //fetches the users location automatically
   useEffect(() => {
@@ -58,7 +59,8 @@ const Register = () => {
         password,
         profile,
         location,
-        bio
+        bio,
+        isInvestor
       })
       .then((res) => {
         toast.success("Register successful");
@@ -120,6 +122,12 @@ const Register = () => {
               onChange={(e) => setBio(e.target.value)}
               className='bio'
             />
+                <select style={{color:"#555"}} className='form-control' onChange={(e) => setIsInvestor(e.target.value)}>
+                <option value="nothing" selected>Are you  an Investor</option> 
+                <option value="true" className='form-control' >Yes</option>
+                <option value="false" className='form-control'>No</option> 
+                
+            </select>
          <label htmlFor="profile">Choose profile photo</label>
             <TextField id="outlined-basic" type="file" variant="outlined" onChange={handleFileChange} />
             <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">

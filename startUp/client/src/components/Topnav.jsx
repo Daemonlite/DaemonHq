@@ -124,7 +124,7 @@ function Topnav() {
                       textAlign="center"
                       onClick={() => navigate("/salaries")}
                     >
-                      Salaries
+                     Investors
                     </Typography>
                   </MenuItem>
                   <MenuItem>
@@ -170,10 +170,10 @@ function Topnav() {
                   Company Review
                 </Button>
                 <Button
-                  onClick={() => navigate("/salaries")}
+                  onClick={() => navigate("/investors")}
                   sx={{ my: 2, color: "white", display: "block" }}
                 >
-                  Find Salaries
+                  Find Investors
                 </Button>
                 <Button
                   onClick={() => navigate("/stocks")}
