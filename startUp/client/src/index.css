@@ -285,7 +285,7 @@ body {
 .chat-window .chat-header {
   height: 45px;
   
-  background: #263238;
+  background: #607d8b;
   position: relative;
   cursor: pointer;
 }
@@ -415,6 +415,9 @@ margin-left: 50px;
 }
 .time{
   margin-left: 10px;
+}
+.investors{
+margin-top: 100px;
 }
 @media only screen and (max-width: 768px) {
   .detailpage {
