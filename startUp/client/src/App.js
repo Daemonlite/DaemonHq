@@ -20,8 +20,8 @@ import Health from './categories/Health';
 import Comments from './components/Comments';
 import CreateListing from './pages/CreateListing';
 import Bids from './components/Bids'
-import Chats from './components/ChatRoom';
-import CreateChatroom from './pages/CreateChat';
+import Room from './components/ChatRoom';
+
 
 function App() {
   return (
@@ -44,8 +44,7 @@ function App() {
       <Route path='/listings/:id' element={<Bids/>}/>
       <Route path='/health'  element={<Health/>}/>
       <Route path='listing/create' element={<CreateListing/>}/>
-      <Route path='/room' element={<Chats/>} />
-      <Route path='/room/create'  element={<CreateChatroom/>}/>
+      <Route path='/room' element={<Room/>} />
       <Route path='*'  element={<Error/>}/>
      </Routes>
      </BrowserRouter>
