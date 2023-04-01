@@ -1,19 +1,18 @@
 import { Button } from "@mui/material";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import GoogleIcon from "@mui/icons-material/Google";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-
+import { GoogleLogin } from "react-google-login";
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -21,14 +20,14 @@ const Register = () => {
   const [fullName, setFullName] = useState("");
   const [profile, setProfile] = useState("");
   const [location, setLocation] = useState("");
-  const [bio,setBio] = useState("")
-  const [isInvestor,setIsInvestor] = useState(false)
+  const [bio, setBio] = useState("");
+  const [isInvestor, setIsInvestor] = useState(false);
 
   //fetches the users location automatically
   useEffect(() => {
-    fetch('https://ipapi.co/json/')
-      .then(response => response.json())
-      .then(data => {
+    fetch("https://ipapi.co/json/")
+      .then((response) => response.json())
+      .then((data) => {
         setLocation(data.city);
       });
   }, []);
@@ -60,7 +59,7 @@ const Register = () => {
         profile,
         location,
         bio,
-        isInvestor
+        isInvestor,
       })
       .then((res) => {
         toast.success("Register successful");
@@ -81,14 +80,33 @@ const Register = () => {
     event.preventDefault();
   };
 
+  //gogle registration
+  const handleGoogleSuccess = async (googleData) => {
+    const res = await axios.post(
+      "http://localhost:7000/api/users/register/google",
+      {
+        token: googleData.tokenId,
+      }
+    );
+    if (res.data) {
+      localStorage.setItem("userInfo", JSON.stringify(res.data));
+      navigate("/");
+    }
+  };
 
-
-
+  const handleGoogleFailure = (error) => {
+    console.log(error);
+  };
 
   return (
-    <div  className="back">
+    <div className="back">
       <div>
-      <h2 className="headi" style={{textAlign:"center",marginTop:'20px',color:"#555"}}>Maximize the potential of your career.</h2>
+        <h2
+          className="headi"
+          style={{ textAlign: "center", marginTop: "20px", color: "#555" }}
+        >
+          Maximize the potential of your career.
+        </h2>
         <header>
           <Box
             component="form"
@@ -114,22 +132,36 @@ const Register = () => {
               type="email"
               onChange={(e) => setEmail(e.target.value)}
             />
-              <TextField
+            <TextField
               id="outlined-basic"
               label="Add Bio"
               variant="outlined"
               type="text"
               onChange={(e) => setBio(e.target.value)}
-              className='bio'
+              className="bio"
             />
-                <select style={{color:"#555"}} className='form-control' onChange={(e) => setIsInvestor(e.target.value)}>
-                <option value="nothing" selected>Are you  an Investor</option> 
-                <option value="true" className='form-control' >Yes</option>
-                <option value="false" className='form-control'>No</option> 
-                
+            <select
+              style={{ color: "#555" }}
+              className="form-control"
+              onChange={(e) => setIsInvestor(e.target.value)}
+            >
+              <option value="nothing" selected>
+                Are you an Investor
+              </option>
+              <option value="true" className="form-control">
+                Yes
+              </option>
+              <option value="false" className="form-control">
+                No
+              </option>
             </select>
-         <label htmlFor="profile">Choose profile photo</label>
-            <TextField id="outlined-basic" type="file" variant="outlined" onChange={handleFileChange} />
+            <label htmlFor="profile">Choose profile photo</label>
+            <TextField
+              id="outlined-basic"
+              type="file"
+              variant="outlined"
+              onChange={handleFileChange}
+            />
             <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
               <InputLabel htmlFor="outlined-adornment-password">
                 Password
@@ -153,7 +185,7 @@ const Register = () => {
                 label="Password"
               />
             </FormControl>
-   
+
             <Button
               variant="contained"
               style={{ width: "425px" }}
@@ -164,15 +196,20 @@ const Register = () => {
             <p style={{ textAlign: "center" }}>or</p>
 
             <div className="google">
-              <GoogleIcon />
-              Sign up with google
+              <GoogleLogin
+                clientId="992093751924-tn4hp8r1ois9khru52plohmrug93sgap.apps.googleusercontent.com"
+                buttonText="Sign up with Google"
+                onSuccess={handleGoogleSuccess}
+                onFailure={handleGoogleFailure}
+                cookiePolicy={"single_host_origin"}
+              />
+           
             </div>
             <a href="/" className="google">
               Have an account? Login
             </a>
           </Box>
         </header>
-
       </div>
     </div>
   );
