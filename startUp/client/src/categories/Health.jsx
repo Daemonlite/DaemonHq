@@ -38,7 +38,7 @@ const navigate = useNavigate()
     return <div>Loading...</div>;
   }
   return (
-    <>
+    <div style={{marginTop:"100px"}}>
       <h2 className="head" id="two" style={{ marginLeft: "200px" }}>
         Health Industry
       </h2>
@@ -110,7 +110,7 @@ const navigate = useNavigate()
           </div>
         ))}
       </div>
-    </>
+    </div>
   );
 };
 
