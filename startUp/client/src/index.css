@@ -343,7 +343,7 @@ body {
 }
 
 #you .message-content {
-  justify-content: flex-start;
+margin-left: 50px;
 }
 
 #you .message-meta {
@@ -356,7 +356,7 @@ body {
 }
 
 #other .message-content {
-  justify-content: flex-end;
+ margin-right: 50px;
   background-color: cornflowerblue;
 }
 
@@ -412,6 +412,9 @@ body {
 }
 .hide {
   opacity: 0 !important;
+}
+.time{
+  margin-left: 10px;
 }
 @media only screen and (max-width: 768px) {
   .detailpage {
