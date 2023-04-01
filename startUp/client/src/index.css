@@ -80,11 +80,7 @@ a,Link{
   margin-top: 15px;
   margin-left: 20px;
 }
-.google:hover{
-  background-color: #555;
-  color: #fff;
-  transition: .5s;
-}
+
 .land{
   display: flex;
   justify-content: space-around;
