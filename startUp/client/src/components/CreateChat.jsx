@@ -28,36 +28,32 @@ function Chat({ socket, username, room }) {
     });
   }, [socket]);
 
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter") {
-      sendMessage();
-    }
-  };
-
   return (
     <div className="chat-window">
       <div className="chat-header">
-        <p>Live Chat</p>
+        <p> {room}</p>
       </div>
       <div className="chat-body">
-        {messageList.map((messageContent) => {
-          return (
-            <div
-              className="message"
-              id={username === messageContent.author ? "you" : "other"}
-            >
-              <div>
-                <div className="message-content">
-                  <p>{messageContent.message}</p>
-                </div>
-                <div className="message-meta">
-                  <p id="time">{messageContent.time}</p>
-                  <p id="author">{messageContent.author}</p>
+        <div className="message-container">
+          {messageList.map((messageContent) => {
+            return (
+              <div
+                className="message"
+                id={username === messageContent.author ? "you" : "other"}
+              >
+                <div>
+                  <div className="message-content">
+                    <p>{messageContent.message}</p>
+                  </div>
+                  <div className="message-meta">
+                    <p id="time">{messageContent.time}</p>
+                    <p id="author">{messageContent.author}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
       <div className="chat-footer">
         <input
@@ -67,7 +63,9 @@ function Chat({ socket, username, room }) {
           onChange={(event) => {
             setCurrentMessage(event.target.value);
           }}
-          onKeyDown={handleKeyDown}
+          onKeyPress={(event) => {
+            event.key === "Enter" && sendMessage();
+          }}
         />
         <button onClick={sendMessage}>&#9658;</button>
       </div>

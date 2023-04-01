@@ -1,15 +1,22 @@
 
 import io from "socket.io-client";
 import { useState } from "react";
-import Chat from "../pages/CreateChat";
-
+import Chat from "./CreateChat"
+import TextField from "@mui/material/TextField";
+import {useEffect} from 'react'
+import Button from '@mui/material/Button'
 const socket = io.connect("http://localhost:7000");
 
-function App() {
+function Room() {
   const [username, setUsername] = useState("");
   const [room, setRoom] = useState("");
   const [showChat, setShowChat] = useState(false);
+ 
 
+ useEffect(()=>{
+  const user = JSON.parse(localStorage.getItem("userInfo"))
+  setUsername(user.fullName)
+ },[])
   const joinRoom = () => {
     if (username !== "" && room !== "") {
       socket.emit("join_room", room);
@@ -21,22 +28,17 @@ function App() {
     <div className="App">
       {!showChat ? (
         <div className="joinChatContainer">
-          <h3>Join A Chat</h3>
-          <input
+         
+          <br />
+          <TextField
             type="text"
-            placeholder="John..."
-            onChange={(event) => {
-              setUsername(event.target.value);
-            }}
-          />
-          <input
-            type="text"
-            placeholder="Room ID..."
+            label="enter room id to join a chat..."
             onChange={(event) => {
               setRoom(event.target.value);
             }}
+            style={{width:"300px"}}
           />
-          <button onClick={joinRoom}>Join A Room</button>
+          <Button variant='contained' onClick={joinRoom} style={{marginLeft:"30px"}}>Join A Room</Button>
         </div>
       ) : (
         <Chat socket={socket} username={username} room={room} />
@@ -45,6 +47,6 @@ function App() {
   );
 }
 
-export default App;
+export default Room;
 
 
