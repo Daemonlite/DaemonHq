@@ -101,12 +101,6 @@ const Register = () => {
   return (
     <div className="back">
       <div>
-        <h2
-          className="headi"
-          style={{ textAlign: "center", marginTop: "20px", color: "#555" }}
-        >
-          Maximize the potential of your career.
-        </h2>
         <header>
           <Box
             component="form"
@@ -196,14 +190,24 @@ const Register = () => {
             <p style={{ textAlign: "center" }}>or</p>
 
             <div className="google">
-              <GoogleLogin
-                clientId="992093751924-tn4hp8r1ois9khru52plohmrug93sgap.apps.googleusercontent.com"
-                buttonText="Sign up with Google"
-                onSuccess={handleGoogleSuccess}
-                onFailure={handleGoogleFailure}
-                cookiePolicy={"single_host_origin"}
-              />
-           
+              <div
+                id="g_id_onload"
+                data-client_id="992093751924-tn4hp8r1ois9khru52plohmrug93sgap.apps.googleusercontent.comD"
+                data-context="signup"
+                data-ux_mode="popup"
+                data-login_uri="http://localhost:3000/"
+                data-itp_support="true"
+              ></div>
+
+              <div
+                class="g_id_signin"
+                data-type="standard"
+                data-shape="rectangular"
+                data-theme="outline"
+                data-text="signin_with"
+                data-size="large"
+                data-logo_alignment="left"
+              ></div>
             </div>
             <a href="/" className="google">
               Have an account? Login
