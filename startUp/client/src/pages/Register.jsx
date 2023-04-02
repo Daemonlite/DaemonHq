@@ -12,7 +12,7 @@ import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { GoogleLogin } from "react-google-login";
+import GitHubLogin from 'react-github-login';
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -80,23 +80,15 @@ const Register = () => {
     event.preventDefault();
   };
 
-  //gogle registration
-  const handleGoogleSuccess = async (googleData) => {
-    const res = await axios.post(
-      "http://localhost:7000/api/users/register/google",
-      {
-        token: googleData.tokenId,
-      }
-    );
-    if (res.data) {
-      localStorage.setItem("userInfo", JSON.stringify(res.data));
-      navigate("/");
-    }
+//github auth
+
+  const onSuccess = (response) => {
+    console.log(response);
   };
 
-  const handleGoogleFailure = (error) => {
-    console.log(error);
-  };
+  const onFailure = (response) => {
+    console.error(response);
+  };  
 
   return (
     <div className="back">
@@ -190,24 +182,11 @@ const Register = () => {
             <p style={{ textAlign: "center" }}>or</p>
 
             <div className="google">
-              <div
-                id="g_id_onload"
-                data-client_id="992093751924-tn4hp8r1ois9khru52plohmrug93sgap.apps.googleusercontent.comD"
-                data-context="signup"
-                data-ux_mode="popup"
-                data-login_uri="http://localhost:3000/"
-                data-itp_support="true"
-              ></div>
-
-              <div
-                class="g_id_signin"
-                data-type="standard"
-                data-shape="rectangular"
-                data-theme="outline"
-                data-text="signin_with"
-                data-size="large"
-                data-logo_alignment="left"
-              ></div>
+            <GitHubLogin
+   clientId="d51c0725ac9179df482e"
+      onSuccess={onSuccess}
+      onFailure={onFailure}
+    />
             </div>
             <a href="/" className="google">
               Have an account? Login

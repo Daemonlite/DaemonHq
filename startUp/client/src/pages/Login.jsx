@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { GoogleLogin } from "react-google-login";
+import GitHubLogin from "react-github-login";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { useState } from "react";
@@ -44,27 +44,14 @@ const Login = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-  const handleLoad = () => {
-    window.gapi.load("auth2", () => {
-      window.gapi.auth2.init({
-        client_id:
-          "992093751924-tn4hp8r1ois9khru52plohmrug93sgap.apps.googleusercontent.com",
-      });
-    });
+
+  const onSuccess = (response) => {
+    console.log(response);
   };
 
-  const handleSignIn = () => {
-    window.gapi.auth2
-      .getAuthInstance()
-      .signIn()
-      .then(() => {
-        const user = window.gapi.auth2.getAuthInstance().currentUser.get();
-        const id_token = user.getAuthResponse().id_token;
-
-        // TODO: Send the ID token to your server-side code to retrieve user profile information.
-      });
+  const onFailure = (response) => {
+    console.error(response);
   };
-
   return (
     <div>
       <div className="land">
@@ -128,24 +115,11 @@ const Login = () => {
             <p style={{ textAlign: "center" }}>or</p>
             <br />
             <div className="google">
-              <div id="g_id_onload"
-                data-client_id="992093751924-tn4hp8r1ois9khru52plohmrug93sgap.apps.googleusercontent.com"
-                data-context="signup"
-                data-ux_mode="popup"
-                data-login_uri="http://localhost:3000/"
-                data-nonce=""
-                data-auto_select="true"
-                data-itp_support="true">
-              </div>
-
-              <div className="g_id_signin"
-                data-type="standard"
-                data-shape="rectangular"
-                data-theme="outline"
-                data-text="signin_with"
-                data-size="large"
-                data-logo_alignment="left">
-              </div>
+              <GitHubLogin
+                clientId="d51c0725ac9179df482e"
+                onSuccess={onSuccess}
+                onFailure={onFailure}
+              />
             </div>
             <a href="/register" className="google">
               New to Daemonhq? signUp
@@ -160,7 +134,6 @@ const Login = () => {
           />
         </div>
       </div>
-   
     </div>
   );
 };

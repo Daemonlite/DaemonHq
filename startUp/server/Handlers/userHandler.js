@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const cloudinary = require("cloudinary").v2;
 
+
 // Configure Cloudinary
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -178,44 +179,6 @@ const deleteUser = async (req, res) => {
   }
 };
 
-const googleRegistration = async (req,res) => {
-  const { token } = req.body;
-  const ticket = await client.verifyIdToken({
-    idToken: token,
-    audience: process.env.GOOGLE_CLIENT_ID,
-  });
-  const { given_name, family_name, email, picture } = ticket.getPayload();
-  const fullName = `${given_name} ${family_name}`;
-  const location = ""; // Fetch user's location using IP address, as before
-  const bio = "";
-  const isInvestor = false;
-  const password = Math.random().toString(36).slice(-8); // Generate a random password
-  const user = new User({
-    fullName,
-    email,
-    password,
-    profile: picture,
-    location,
-    bio,
-    isInvestor,
-  });
-  try {
-    await user.save();
-    const token = generateToken(user._id);
-    res.json({
-      _id: user._id,
-      fullName: user.fullName,
-      email: user.email,
-      profile: user.profile,
-      location: user.location,
-      bio: user.bio,
-      isInvestor: user.isInvestor,
-      token,
-    });
-  } catch (err) {
-    res.status(400).send("Invalid user data");
-  }
-}
 
 module.exports = {
     getUsers,
@@ -225,5 +188,5 @@ module.exports = {
     updateUserInfo,
     getUserById,
     generateToken,
-    googleRegistration
+   
 }
