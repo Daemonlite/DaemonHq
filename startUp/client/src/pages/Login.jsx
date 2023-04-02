@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import GitHubLogin from "react-github-login";
+import GitHubLogin from 'react-github-login';
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { useState } from "react";
@@ -45,13 +45,7 @@ const Login = () => {
     event.preventDefault();
   };
 
-  const onSuccess = (response) => {
-    console.log(response);
-  };
 
-  const onFailure = (response) => {
-    console.error(response);
-  };
   return (
     <div>
       <div className="land">
@@ -115,11 +109,7 @@ const Login = () => {
             <p style={{ textAlign: "center" }}>or</p>
             <br />
             <div className="google">
-              <GitHubLogin
-                clientId="d51c0725ac9179df482e"
-                onSuccess={onSuccess}
-                onFailure={onFailure}
-              />
+  
             </div>
             <a href="/register" className="google">
               New to Daemonhq? signUp
