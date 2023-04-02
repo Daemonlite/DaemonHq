@@ -12,7 +12,6 @@ import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import GitHubLogin from 'react-github-login';
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -80,15 +79,7 @@ const Register = () => {
     event.preventDefault();
   };
 
-//github auth
-
-  const onSuccess = (response) => {
-    console.log(response);
-  };
-
-  const onFailure = (response) => {
-    console.error(response);
-  };  
+  
 
   return (
     <div className="back">
@@ -182,11 +173,7 @@ const Register = () => {
             <p style={{ textAlign: "center" }}>or</p>
 
             <div className="google">
-            <GitHubLogin
-   clientId="d51c0725ac9179df482e"
-      onSuccess={onSuccess}
-      onFailure={onFailure}
-    />
+     
             </div>
             <a href="/" className="google">
               Have an account? Login
