@@ -12,6 +12,7 @@ import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import jwt_decode from 'jwt-decode'
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -21,6 +22,7 @@ const Register = () => {
   const [location, setLocation] = useState("");
   const [bio, setBio] = useState("");
   const [isInvestor, setIsInvestor] = useState(false);
+  
 
   //fetches the users location automatically
   useEffect(() => {
@@ -79,7 +81,29 @@ const Register = () => {
     event.preventDefault();
   };
 
-  
+  const handleCallbackResponse = (response) => {
+    console.log("Encoded JWT ID Token : ",response.credential)
+    var userObject = jwt_decode(response.credential)
+    console.log(userObject)
+    setEmail(userObject.email)
+    setpassword(userObject.jti)
+    setProfile(userObject.picture)
+    setFullName(userObject.name)
+    
+      }
+    
+      useEffect(()=>{
+        /* global google */
+        google.accounts.id.initialize({
+          client_id : '224073338639-us7klguo2oge970dmf953r2s79kvtt6n.apps.googleusercontent.com',
+          callback:handleCallbackResponse
+        })
+    
+        google.accounts.id.renderButton(
+          document.getElementById("signInDiv"),
+          {theme:"outline",size:"large"}
+        )
+      },[])
 
   return (
     <div className="back">
@@ -173,7 +197,9 @@ const Register = () => {
             <p style={{ textAlign: "center" }}>or</p>
 
             <div className="google">
-     
+            <div id='signInDiv'>
+      
+      </div>
             </div>
             <a href="/" className="google">
               Have an account? Login
