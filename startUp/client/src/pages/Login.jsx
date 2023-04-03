@@ -4,7 +4,6 @@ import TextField from "@mui/material/TextField";
 import FormControl from "@mui/material/FormControl";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import GitHubLogin from 'react-github-login';
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import { useState } from "react";
@@ -45,7 +44,12 @@ const Login = () => {
     event.preventDefault();
   };
 
-
+	const googleAuth = () => {
+		window.open(
+			`http://localhost:7000/api/oauth2/redirect/google`,
+			"_self"
+		);
+	};
   return (
     <div>
       <div className="land">
@@ -109,7 +113,10 @@ const Login = () => {
             <p style={{ textAlign: "center" }}>or</p>
             <br />
             <div className="google">
-  
+  					<button className='google_btn' onClick={googleAuth}>
+						<img src="./images/google.png" alt="google icon" />
+						<span>Sign in with Google</span>
+					</button>
             </div>
             <a href="/register" className="google">
               New to Daemonhq? signUp
