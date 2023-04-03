@@ -6,12 +6,13 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import InputLabel from "@mui/material/InputLabel";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import jwt_decode from 'jwt-decode'
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
@@ -44,12 +45,25 @@ const Login = () => {
     event.preventDefault();
   };
 
-	const googleAuth = () => {
-		window.open(
-			`http://localhost:7000/api/oauth2/redirect/google`,
-			"_self"
-		);
-	};
+  const handleCallbackResponse = (response) => {
+console.log("Encoded JWT ID Token : ",response.credential)
+var userObject = jwt_decode(response.credential)
+console.log(userObject)
+
+  }
+
+  useEffect(()=>{
+    /* global google */
+    google.accounts.id.initialize({
+      client_id : '224073338639-us7klguo2oge970dmf953r2s79kvtt6n.apps.googleusercontent.com',
+      callback:handleCallbackResponse
+    })
+
+    google.accounts.id.renderButton(
+      document.getElementById("signInDiv"),
+      {theme:"outline",size:"large"}
+    )
+  },[])
   return (
     <div>
       <div className="land">
@@ -113,10 +127,10 @@ const Login = () => {
             <p style={{ textAlign: "center" }}>or</p>
             <br />
             <div className="google">
-  					<button className='google_btn' onClick={googleAuth}>
-						<img src="./images/google.png" alt="google icon" />
-						<span>Sign in with Google</span>
-					</button>
+  			
+          <div id='signInDiv'>
+      
+          </div>
             </div>
             <a href="/register" className="google">
               New to Daemonhq? signUp
