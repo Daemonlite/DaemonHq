@@ -1,38 +1,51 @@
-const passport = require('passport');
-const GitHubStrategy = require('passport-github').Strategy;
-const User = require('./models/User');
+var GoogleStrategy = require('passport-google-oauth20');
 
-passport.serializeUser(function(user, done) {
-  done(null, user.id);
-});
-
-passport.deserializeUser(function(id, done) {
-  User.findById(id, function(err, user) {
-    done(err, user);
-  });
-});
-
-passport.use(new GitHubStrategy({
-    clientID: process.env.GITHUB_CLIENT_ID,
-    clientSecret: process.env.GITHUB_CLIENT_SECRET,
-    callbackURL: "/auth/github/callback"
+passport.use(new GoogleStrategy({
+    clientID: GOOGLE_CLIENT_ID,
+    clientSecret: GOOGLE_CLIENT_SECRET,
+    callbackURL: 'https://www.example.com/oauth2/redirect/google',
+    scope: [ 'profile' ],
+    state: true
   },
-  function(accessToken, refreshToken, profile, cb) {
-    User.findOne({ githubId: profile.id }, function (err, user) {
+  function verify(accessToken, refreshToken, profile, cb) {
+    db.get('SELECT * FROM federated_credentials WHERE provider = ? AND subject = ?', [
+      'https://accounts.google.com',
+      profile.id
+    ], function(err, cred) {
       if (err) { return cb(err); }
-      if (!user) {
-        const newUser = new User({
-          githubId: profile.id,
-          username: profile.username,
-          email: profile.emails[0].value
-        });
-        newUser.save(function (err) {
-          if (err) return cb(err);
-          return cb(null, newUser);
+      
+      if (!cred) {
+        // The account at Google has not logged in to this app before.  Create a
+        // new user record and associate it with the Google account.
+        db.run('INSERT INTO users (name) VALUES (?)', [
+          profile.displayName
+        ], function(err) {
+          if (err) { return cb(err); }
+
+          var id = this.lastID;
+          db.run('INSERT INTO federated_credentials (user_id, provider, subject) VALUES (?, ?, ?)', [
+            id,
+            'https://accounts.google.com',
+            profile.id
+          ], function(err) {
+            if (err) { return cb(err); }
+            var user = {
+              id: id,
+              name: profile.displayName
+            };
+            return cb(null, user);
+          });
         });
       } else {
-        return cb(null, user);
+        // The account at Google has previously logged in to the app.  Get the
+        // user record associated with the Google account and log the user in.
+        db.get('SELECT * FROM users WHERE id = ?', [ cred.user_id ], function(err, row) {
+          if (err) { return cb(err); }
+          if (!row) { return cb(null, false); }
+          return cb(null, row);
+        });
       }
     });
   }
 ));
+

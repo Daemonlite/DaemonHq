@@ -7,11 +7,20 @@ const { Server } = require("socket.io");
 const server = http.createServer(app);
 const port = process.env.PORT || 7000;
 const connectDb = require('./Database/connect');
-
-
+const passport = require("passport");
+const session = require('express-session');
+const cookieSession = require("cookie-session");
 //connecting to mongodb
 connectDb();
 
+//sessions
+app.use(
+	cookieSession({
+		name: "session",
+		keys: ["cyberwolve"],
+		maxAge: 24 * 60 * 60 * 100,
+	})
+);
 //socket.io server
 const io = new Server(server, {
   cors: {
@@ -24,6 +33,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 // ROUTES
 app.use('/api/users', require('./Routes/userRoutes'));
 app.use('/api/companies', require('./Routes/companyRoutes'));
@@ -34,6 +46,11 @@ app.use('/api/listing/bids', require('./Routes/bidRoutes'));
 app.use('/api/company/newsletter', require('./Routes/newsLetterRoutes'));
 app.use('/api/company/rating', require('./Routes/reviewRoutes'));
 app.use('/api/jobs/find', require('./Routes/jobRoutes'));
+app.use('/api/auth',require('./Routes/passportRoutes'))
+
+
+
+
 
 // socket-io connections
 io.on("connection", (socket) => {
