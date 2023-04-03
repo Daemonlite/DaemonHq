@@ -18,6 +18,7 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setpassword] = useState("");
 
+
   const navigate = useNavigate();
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -49,6 +50,8 @@ const Login = () => {
 console.log("Encoded JWT ID Token : ",response.credential)
 var userObject = jwt_decode(response.credential)
 console.log(userObject)
+setEmail(userObject.email)
+setpassword(userObject.jti)
 
   }
 
