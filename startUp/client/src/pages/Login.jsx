@@ -50,7 +50,7 @@ const Login = () => {
     console.log("Encoded JWT ID Token : ",response.credential)
     var userObject = jwt_decode(response.credential)
     console.log(userObject)
-    const Password = `${userObject.jti}3@`
+    const Password = `${userObject.given_name}wegvfejwy1@`
     // Use the decoded JWT ID token to log the user in
     axios
       .post("http://localhost:7000/api/users/login/", {

@@ -100,13 +100,20 @@ const register = async (req, res) => {
     applications,
   });
 
+  const token = jwt.sign({ fullName: user.fullName, id: user._id, isAdmin: user.isAdmin }, process.env.SECRET, {
+    expiresIn: "2d",
+  });
+
   try {
     await user.save();
-    return res.status(201).json(user);
+    return res.status(201).json({
+      user,token
+    });
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: "Failed to create user" });
   }
+
 };
 
 
