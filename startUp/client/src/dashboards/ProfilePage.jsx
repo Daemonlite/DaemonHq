@@ -1,5 +1,4 @@
-
-import LocationOnIcon from '@mui/icons-material/LocationOn';
+import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import * as React from "react";
@@ -10,50 +9,45 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import { toast } from "react-toastify";
-import Rating from '@mui/material/Rating';
+import Rating from "@mui/material/Rating";
 import { useNavigate } from "react-router-dom";
 const ProfilePage = () => {
-    const [comp, setComp] = useState([]);
+  const [comp, setComp] = useState([]);
 
-    const navigate = useNavigate()
-      const user = JSON.parse(localStorage.getItem("userInfo"));
-      useEffect(() => {
-        axios
-          .get("http://localhost:7000/api/companies", {
-            headers: {
-              token: `Bearer ${user.token}`,
-            },
-          })
-          .then((res) => {
-            const sortedPosts = res.data.sort((a, b) => {
-              return new Date(b.createdAt) - new Date(a.createdAt);
-            });
-            setComp(sortedPosts);
-          })
-          .catch((err) => console.log(err));
-      });
-      const filteredComp = comp.filter(
-        (res) => res.user === user._id
-      );
-    
-      if (!filteredComp) {
-        return <div>Loading...</div>;
-      }
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("userInfo"));
+  useEffect(() => {
+    axios
+      .get("http://localhost:7000/api/companies", {
+        headers: {
+          token: `Bearer ${user.token}`,
+        },
+      })
+      .then((res) => {
+        const sortedPosts = res.data.sort((a, b) => {
+          return new Date(b.createdAt) - new Date(a.createdAt);
+        });
+        setComp(sortedPosts);
+      })
+      .catch((err) => console.log(err));
+  });
+  const filteredComp = comp.filter((res) => res.user === user._id);
+
+  if (!filteredComp) {
+    return <div>Loading...</div>;
+  }
   return (
     <div style={{ marginTop: "100px" }}>
       <div className="profile">
-        <img
-          src={user.profile}
-          alt=""
-          className="profile-img"
-          width={200}
-        />
-        {!user.profile &&     <img
-          src=""
-          alt=""
-          className="profile-img"
-          width={200}
-        />}
+        <img src={user.profile} alt="" className="profile-img" width={200} />
+        {!user.profile && (
+          <img
+            src="./images/avatar.png"
+            alt=""
+            className="profile-img"
+            width={200}
+          />
+        )}
       </div>
       <div className="username">{user.fullName}</div>
       <div className="location">
@@ -137,7 +131,7 @@ const ProfilePage = () => {
         ))}
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ProfilePage
+export default ProfilePage;
