@@ -72,7 +72,7 @@ const Register = () => {
         setEmail("");
       })
       .catch((err) => {
-        toast.error(err.response.data);
+        toast.error(err.message);
       });
   };
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -80,12 +80,14 @@ const Register = () => {
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+ 
 
+  
   const handleCallbackResponse = (response) => {
     console.log("Encoded JWT ID Token : ",response.credential)
     var userObject = jwt_decode(response.credential)
     console.log(userObject)
-    const Password = `${userObject.jti}3@`
+    const Password = `${userObject.given_name}wegvfejwy1@`
     axios
     .post("http://localhost:7000/api/users/register/", {
       email: userObject.email,
@@ -105,7 +107,7 @@ const Register = () => {
       setEmail("");
     })
     .catch((err) => {
-      toast.error("Register failed check credentials passwords must contain symbols and letters")
+      toast.error(err.message)
     });
     
       }

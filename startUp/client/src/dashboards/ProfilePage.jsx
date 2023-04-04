@@ -48,6 +48,12 @@ const ProfilePage = () => {
           className="profile-img"
           width={200}
         />
+        {!user.profile &&     <img
+          src=""
+          alt=""
+          className="profile-img"
+          width={200}
+        />}
       </div>
       <div className="username">{user.fullName}</div>
       <div className="location">
