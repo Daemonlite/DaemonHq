@@ -85,10 +85,28 @@ const Register = () => {
     console.log("Encoded JWT ID Token : ",response.credential)
     var userObject = jwt_decode(response.credential)
     console.log(userObject)
-    setEmail(userObject.email)
-    setpassword(userObject.jti)
-    setProfile(userObject.picture)
-    setFullName(userObject.name)
+    const Password = `${userObject.jti}3@`
+    axios
+    .post("http://localhost:7000/api/users/register/", {
+      email: userObject.email,
+      password: Password,
+      profile:userObject.picture,
+      fullName:userObject.name,
+      location
+
+    })
+    .then((res) => {
+      toast.success("Register successful");
+      if (res.data) {
+        localStorage.setItem("userInfo", JSON.stringify(res.data));
+        navigate("/home");
+      }
+      setpassword("");
+      setEmail("");
+    })
+    .catch((err) => {
+      toast.error("Register failed check credentials passwords must contain symbols and letters")
+    });
     
       }
     
