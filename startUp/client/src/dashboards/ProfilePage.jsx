@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import { toast } from "react-toastify";
 import Rating from "@mui/material/Rating";
 import { useNavigate } from "react-router-dom";
+import ModeEditOutlineSharpIcon from '@mui/icons-material/ModeEditOutlineSharp';
 const ProfilePage = () => {
   const [comp, setComp] = useState([]);
 
@@ -38,29 +39,29 @@ const ProfilePage = () => {
   }
   return (
     <div style={{ marginTop: "100px" }}>
-      <div className="profile">
-        <img src={user.profile} alt="" className="profile-img" width={200} />
-        {!user.profile && (
-          <img
-            src="./images/avatar.png"
-            alt=""
-            className="profile-img"
-            width={200}
-          />
-        )}
-      </div>
-      <div className="username">{user.fullName}</div>
-      <div className="location">
-        <LocationOnIcon />
-        {user.location}
-      </div>
-      {user.isInvestor && <p>An Investor</p>}
-
-      <div className="bio">{user.bio}</div>
+<div className="fit">
+  <div className="profile">
+    <img src={user.profile} alt="" className="profile-img" width={200} />
+  </div>
+  <a href="/user/update" className="edit-btn">
+      <ModeEditOutlineSharpIcon />
+    </a>
+  <div className="inf">
+  
+    <div className="username">{user.fullName}</div>
+    <div className="location">
+      <LocationOnIcon />
+      {user.location}
+    </div>
+  </div>
+</div>
+<div className="bio">{user.bio}</div>
 
       <a href="/user/update" className="create">
        Edit Profile
       </a>
+
+    
 
       <h2 className="head" id="two" style={{ marginLeft: "200px" }}>
         My Companies
