@@ -166,7 +166,7 @@ const Register = () => {
               className="form-control"
               onChange={(e) => setIsInvestor(e.target.value)}
             >
-              <option value="nothing" selected>
+              <option value="nothing">
                 Are you an Investor
               </option>
               <option value="true" className="form-control">
