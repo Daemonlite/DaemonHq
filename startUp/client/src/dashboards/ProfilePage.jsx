@@ -13,6 +13,7 @@ import Rating from "@mui/material/Rating";
 import { useNavigate } from "react-router-dom";
 import IconButton from '@mui/material/IconButton';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
+
 const ProfilePage = () => {
   const [comp, setComp] = useState([]);
   const [profile,setProfile] = useState("")
@@ -57,6 +58,18 @@ const ProfilePage = () => {
       console.log(err);
     }
   };
+
+  axios.put('http://localhost:7000/api/users/',{
+    profile
+  })
+  .then((res)=>{
+    toast.success('profile updated successfully')
+    console.log(res.data)
+  })
+  .catch((err)=>{
+    console.log(err)
+  toast.error('unable to update profile')
+  })
   return (
     <div style={{ marginTop: "100px" }}>
 <div className="fit">
