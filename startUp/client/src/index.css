@@ -484,6 +484,9 @@ margin-top: 100px;
 .create:active {
   background-color: #005cbf;
 }
+.emp{
+  text-align: center;
+}
 
 
 @media only screen and (max-width: 768px) {

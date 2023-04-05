@@ -130,7 +130,9 @@ const ProfilePage = () => {
             </Card>
           </div>
         ))}
+
       </div>
+      {filteredComp.length === 0 && (<p className="emp">You have no companies <a href='company/create'>create one</a></p>)}
     </div>
   );
 };
