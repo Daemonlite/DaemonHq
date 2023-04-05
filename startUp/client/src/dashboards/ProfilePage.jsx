@@ -58,8 +58,8 @@ const ProfilePage = () => {
 
       <div className="bio">{user.bio}</div>
 
-      <a href="/company/create" className="create">
-        Create Company
+      <a href="/user/update" className="create">
+       Edit Profile
       </a>
 
       <h2 className="head" id="two" style={{ marginLeft: "200px" }}>

@@ -22,6 +22,7 @@ import CreateListing from './pages/CreateListing';
 import Bids from './components/Bids'
 import Room from './components/ChatRoom';
 import Investors  from './components/Investors';
+import UpdateUserInfo from './components/UpdateUserInfo';
 
 function App() {
   return (
@@ -46,6 +47,7 @@ function App() {
       <Route path='listing/create' element={<CreateListing/>}/>
       <Route path='/room' element={<Room/>} />
       <Route path='/investors' element={<Investors/>}/>
+      <Route path='/user/update'  element={<UpdateUserInfo/>}/>
       <Route path='*'  element={<Error/>}/>
      </Routes>
      </BrowserRouter>
