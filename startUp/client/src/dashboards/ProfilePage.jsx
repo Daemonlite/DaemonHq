@@ -16,7 +16,7 @@ import PhotoCamera from '@mui/icons-material/PhotoCamera';
 
 const ProfilePage = () => {
   const [comp, setComp] = useState([]);
-  const [profile,setProfile] = useState("")
+  
 
   const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem("userInfo"));
@@ -41,42 +41,15 @@ const ProfilePage = () => {
     return <div>Loading...</div>;
   }
 
-  const handleFileChange = async (e) => {
-    const file = e.target.files[0];
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "ztzo5rzi");
+  
 
-    try {
-      const res = await axios.post(
-        "https://api.cloudinary.com/v1_1/dxt2sumzc/image/upload",
-        formData
-      );
-      const imageUrl = res.data.secure_url;
-      setProfile(imageUrl);
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  axios.put('http://localhost:7000/api/users/',{
-    profile
-  })
-  .then((res)=>{
-    toast.success('profile updated successfully')
-    console.log(res.data)
-  })
-  .catch((err)=>{
-    console.log(err)
-  toast.error('unable to update profile')
-  })
   return (
     <div style={{ marginTop: "100px" }}>
 <div className="fit">
   <div className="profile">
     <img src={user.profile} alt="" className="profile-img" width={200} />
   </div>
-  <IconButton color="primary" aria-label="upload picture" component="label" onClick={handleFileChange}>
+  <IconButton color="primary" aria-label="upload picture" component="label" >
         <input hidden accept="image/*" type="file" />
         <PhotoCamera  className='edit-btn'/>
       </IconButton>
